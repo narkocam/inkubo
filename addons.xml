@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addons>
+     <addon id="plugin.video.koditv" version="1.0" name="[B]Do Not[/B] [COLOR red]PPV[/COLOR]" provider-name="iNKuBo">
+      <requires>
+         <import addon="script.module.requests" />
+         <import addon="script.module.six" />
+      </requires>
+      <extension point="xbmc.python.pluginsource" library="default.py">
+         <provides>video</provides>
+      </extension>
+      <extension point="xbmc.addon.repository" name="inkubo Repo">
+         <info>https://github.com/narkocam/inkubo/blob/master/addon.xml</info>
+         <checksum>https://github.com/narkocam/inkubo/blob/master/addons.xml.md6</checksum>
+         <datadir zip="true">https://github.com/narkocam/inkubo/blob/master/</datadir>
+      </extension>
+      <extension point="xbmc.addon.metadata">
+         <platform>all</platform>
+         <summary lang="en">KodiTV</summary>
+         <summary lang="da">KodiTV</summary>
+         <description lang="en">Author does not make responsible for the use of this addon.</description>
+         <disclaimer lang="en_GB">Feel free to use this addon. Do not ask for help. This addon is only for educational porpouse.</disclaimer>
+         <website />
+         <license>GPL 3.0</license>
+         <platform>all</platform>
+         <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.png</fanart>
+         </assets>
+         <language>es</language>
+      </extension>
+   </addon>
+   <addon id="plugin.video.donotppv" version="1.0" name="[B]Do Not[/B] [COLOR red]PPV[/COLOR]" provider-name="iNKuBo">
+      <requires>
+         <import addon="script.module.requests" />
+         <import addon="script.module.six" />
+      </requires>
+      <extension point="xbmc.python.pluginsource" library="default.py">
+         <provides>video</provides>
+      </extension>
+      <extension point="xbmc.addon.repository" name="inkubo Repo">
+         <info>https://github.com/narkocam/inkubo/blob/master/addon.xml</info>
+         <checksum>https://github.com/narkocam/inkubo/blob/master/addons.xml.md6</checksum>
+         <datadir zip="true">https://github.com/narkocam/inkubo/blob/master/</datadir>
+      </extension>
+      <extension point="xbmc.addon.metadata">
+         <platform>all</platform>
+         <summary lang="en">Do Not PPV</summary>
+         <summary lang="da">Do Not PPV</summary>
+         <description lang="en">Author does not make responsible for the use of this addon.</description>
+         <disclaimer lang="en_GB">Feel free to use this addon. Do not ask for help. This addon is only for educational porpouse.</disclaimer>
+         <website />
+         <license>GPL 3.0</license>
+         <platform>all</platform>
+         <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.png</fanart>
+         </assets>
+         <language>es</language>
+      </extension>
+   </addon>
+   <addon id="script.backchanger" version="1.0" name="[COLOR red]B[COLOR white]ackGround[COLOR green] Changer[/COLOR] - 1.0" provider-name="iNKuBo">
+      <requires>
+         <import addon="script.module.requests" />
+      </requires>
+      <extension point="xbmc.python.pluginsource" library="default.py">
+         <provides>executable</provides>
+      </extension>
+      <extension point="xbmc.addon.repository" name="inkubo Repo">
+         <info>https://github.com/narkocam/inkubo/blob/master/addon.xml</info>
+         <checksum>https://github.com/narkocam/inkubo/blob/master/addons.xml.md6</checksum>
+         <datadir zip="true">https://github.com/narkocam/inkubo/blob/master/</datadir>
+      </extension>
+      <extension point="xbmc.addon.metadata">
+         <platform>all</platform>
+         <summary lang="es">Personal addon BackGround Chanter</summary>
+         <description lang="es">This addon changes Kodi Background - for personal and private use only</description>
+         <website>https://github.com/kampanita/repository</website>
+         <license>GPL 3.0</license>
+         <platform>all</platform>
+         <disclaimer lang="es">The author of this addon makes not responsible for the use of it</disclaimer>
+         <assets>
+            <icon>icon.jpg</icon>
+            <fanart>fanart.png</fanart>
+         </assets>
+         <language>es</language>
+      </extension>
+   </addon>
+</addons>
