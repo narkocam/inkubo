@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="repository.inkubo" name="inkubo Repo" version="1.0" provider-name="inkubo">
 	<extension point="xbmc.addon.repository" name="Kampanita Repo">
-		<info>https://raw.githubusercontent.com/narkocam/inkubo/master/addons.xml</info>
-		<checksum>https://raw.githubusercontent.com/narkocam/inkubo/master/addons.xml.md6</checksum>
-		<datadir zip="true">https://raw.githubusercontent.com/narkocam/inkubo/master/</datadir>
+		<info>https://raw.githubusercontent.com/narkocam/inkubo/main/addons.xml</info>
+		<checksum>https://raw.githubusercontent.com/narkocam/inkubo/main/addons.xml.md6</checksum>
+		<datadir zip="true">https://raw.githubusercontent.com/narkocam/inkubo/main/</datadir>
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary>Repositorio iNKuBo</summary>
