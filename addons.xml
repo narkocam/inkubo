@@ -9,9 +9,9 @@
          <provides>video</provides>
       </extension>
       <extension point="xbmc.addon.repository" name="inkubo Repo">
-         <info>https://github.com/narkocam/inkubo/blob/master/addon.xml</info>
-         <checksum>https://github.com/narkocam/inkubo/blob/master/addons.xml.md6</checksum>
-         <datadir zip="true">https://github.com/narkocam/inkubo/blob/master/</datadir>
+         <info>https://github.com/narkocam/inkubo/blob/main/addon.xml</info>
+         <checksum>https://github.com/narkocam/inkubo/blob/main/addons.xml.md6</checksum>
+         <datadir zip="true">https://github.com/narkocam/inkubo/blob/main/</datadir>
       </extension>
       <extension point="xbmc.addon.metadata">
          <platform>all</platform>
@@ -38,9 +38,9 @@
          <provides>video</provides>
       </extension>
       <extension point="xbmc.addon.repository" name="inkubo Repo">
-         <info>https://github.com/narkocam/inkubo/blob/master/addon.xml</info>
-         <checksum>https://github.com/narkocam/inkubo/blob/master/addons.xml.md6</checksum>
-         <datadir zip="true">https://github.com/narkocam/inkubo/blob/master/</datadir>
+         <info>https://github.com/narkocam/inkubo/blob/main/addon.xml</info>
+         <checksum>https://github.com/narkocam/inkubo/blob/main/addons.xml.md6</checksum>
+         <datadir zip="true">https://github.com/narkocam/inkubo/blob/main/</datadir>
       </extension>
       <extension point="xbmc.addon.metadata">
          <platform>all</platform>
@@ -66,9 +66,9 @@
          <provides>executable</provides>
       </extension>
       <extension point="xbmc.addon.repository" name="inkubo Repo">
-         <info>https://github.com/narkocam/inkubo/blob/master/addon.xml</info>
-         <checksum>https://github.com/narkocam/inkubo/blob/master/addons.xml.md6</checksum>
-         <datadir zip="true">https://github.com/narkocam/inkubo/blob/master/</datadir>
+         <info>https://github.com/narkocam/inkubo/blob/main/addon.xml</info>
+         <checksum>https://github.com/narkocam/inkubo/blob/main/addons.xml.md6</checksum>
+         <datadir zip="true">https://github.com/narkocam/inkubo/blob/main/</datadir>
       </extension>
       <extension point="xbmc.addon.metadata">
          <platform>all</platform>
