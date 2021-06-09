@@ -8,9 +8,9 @@
 - The author of this addon **does not accept any responsability about it's use**. Use it only **under your personal** responsability.
 
 > ##### Repository
->> * [Repository](https://github.com/narkocam/inkubo/raw/master/repository.inkubo.zip)
+>> * [Repository](https://github.com/narkocam/inkubo/raw/master/repository.inkubo-1.0.zip)
 > ##### Video
->> * [KodiTV](https://github.com/narkocam/inkubo/raw/master/plugin.video.koditv.zip)
+>> * [KodiTV](https://github.com/narkocam/inkubo/raw/master/plugin.video.koditv-1.0.zip)
 >> * [DoNotPPV](https://github.com/narcokam/inkubo/raw/master/plugin.video.donotppv-1.0.zip)
 
 > ##### Script
