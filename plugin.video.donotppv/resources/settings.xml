@@ -1,0 +1,6 @@
+<settings>
+   <category>
+    <setting label="[I]Activar [COLOR red]proxy[/COLOR]:[/I]" id="prx" type="bool" value="true" />
+	<setting label="[COLOR red]proxy[/COLOR]:" id="proxy" type="text" value="14.139.189.213:3128" />
+   </category>
+</settings>

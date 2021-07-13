@@ -1,0 +1,763 @@
+# -*- coding: utf-8 -*-
+#------------------------------------------------------------
+# chopodplay - XBMC Add-on by Torete
+# Version 0.2.5 (15.05.2014)
+#------------------------------------------------------------
+# License: GPL (http://www.gnu.org/licenses/gpl-3.0.html)
+# Gracias a la librería plugintools de Jesús (www.mimediacenter.info)
+import os
+import sys
+try:
+    from urllib.parse import urlparse, urlencode
+    from urllib.request import urlopen, Request
+    from urllib.error import HTTPError
+except ImportError:
+    from urlparse import urlparse
+    from urllib import urlencode
+    from urllib2 import urlopen, Request, HTTPError
+import re
+import xbmc
+import xbmcgui
+import xbmcaddon
+import xbmcplugin
+import plugintools
+import unicodedata
+import base64
+import requests
+import shutil
+import base64
+import time
+import six
+import random
+from datetime import date
+from datetime import datetime
+from resolveurl.plugins.lib import jsunpack 
+
+if six.PY3:
+    unicode = str
+
+addon = xbmcaddon.Addon()
+addonname = '[B][LOWERCASE][CAPITALIZE][COLOR white]koditv[/CAPITALIZE][/LOWERCASE][/B][/COLOR]'
+icon = addon.getAddonInfo('icon')
+myaddon = xbmcaddon.Addon("plugin.video.koditv")
+Set_Color = myaddon.getSetting('SetColor')
+Set_View = myaddon.getSetting('SetView')
+
+def run():
+    
+    plugintools.log("---> chopodplay.run <---")
+    #plugintools.set_view(plugintools.LIST)
+    
+    # Get params
+    params = plugintools.get_params()
+    
+    if params.get("action") is None:
+        main_list(params)
+    else:
+       action = params.get("action")
+       url = params.get("url")
+       exec(action+"(params)")
+    plugintools.close_item_list()
+
+  
+def main_list(params):
+    plugintools.log("koditv.main_list ")    
+    #quito los canales de listas de los favoritos si los hay
+    quita_favoritos()
+    plugintools.add_item(action="tulista", title="[B][COLOR mintcream]MegaLista 3x24 [/COLOR][/B]",thumbnail="https://i.imgur.com/O5107Qc.jpg", fanart="https://i.imgur.com/O5107Qc.jpg",  url= "https://pastebin.com/raw/ktiz5e2M",folder= True )    
+    plugintools.add_item(action="multilistas", title="[B][COLOR mintcream]MultiListas España [/COLOR][/B]",thumbnail="https://previews.123rf.com/images/trots1905/trots19051703/trots1905170300006/74476897-conjunto-de-iconos-banderas-de-comunidades-aut%C3%B3nomas-de-espa%C3%B1a-vector-.jpg", fanart="https://previews.123rf.com/images/reamolko/reamolko1605/reamolko160500022/56476783-espa%C3%B1a-pinceladas-de-colores-pinta-icono-nacional-de-bandera-de-pa%C3%ADs-textura-pintada-.jpg",  url= "https://www.gratisiptv.com/lists-iptv/",folder= True )   
+    plugintools.add_item(action="multilistas_mundo", title="[B][COLOR mintcream]MultiListas MUNDO [/COLOR][/B]",thumbnail="http://4.bp.blogspot.com/_NNeaZcy4AMo/TN2rhImSCgI/AAAAAAAAAAU/1NciK750JOg/s1600/earth.png", fanart="https://www.gndiario.com/sites/default/files/styles/noticia_detalle_noticia_2_1/public/noticias/paz-mundial.jpg?h=f27025cf&itok=tfCe8KKi",  url= "https://www.gratisiptv.com/lists-iptv/",folder= True )         
+    plugintools.add_item(action="super_tdt", title="[B][COLOR mintcream]TdT[/COLOR][/B]",thumbnail="https://www.tdtprofesional.com/blog/wp-content/uploads/tdt-1.jpg", fanart="https://upload.wikimedia.org/wikipedia/commons/4/43/Letras_TDT%2C_logo_eliminado._TDT_portuguesa.jpg",  url= "https://github.com/LaQuay/TDTChannels/blob/master/TELEVISION.md",folder= True )     
+    plugintools.add_item(action="super_iptv", title="[B][COLOR mintcream]USA Links [/COLOR][/B]",thumbnail="https://i.pinimg.com/originals/10/11/2a/10112a78cc46fd641966b186deaced98.jpg", fanart="https://i.pinimg.com/originals/62/01/93/620193dbfc63e3510093489aaa8fb37a.jpg",  url= "https://usalinksiptv.blogspot.com",folder= True )
+    plugintools.add_item(action="latinotv", title="[B][COLOR mintcream]Latino TV[/COLOR][/B]",thumbnail="https://play-lh.googleusercontent.com/BlFGD8szMcQhn9VBat6CbN-vvS29lkVCNl02CYN5T5L_lhFvBEPYuZwWKw8OzDZHb5Y", fanart="https://static.wixstatic.com/media/d7a828_3fa132fbf3a04664ae853ffe34d8ac9a~mv2.jpeg/v1/fill/w_468,h_318,al_c,q_80,usm_0.66_1.00_0.01/tulatinotv%20logo.webp",  url= "https://www.televisiongratishd.com/parrilla-gratis.html",folder= True)
+    plugintools.add_item(action="adictos", title="[B][COLOR mintcream]Adictos a la tele[/COLOR][/B]  [COLOR red](Necesario VPN)[/COLOR]",thumbnail="https://clipartstation.com/wp-content/uploads/2018/09/gucken-clipart-1.jpg", fanart="https://nuestropsicologoenmadrid.com/wp-content/uploads/2017/10/La-televisi%C3%B3n-crea-dependencia.jpg",  url= "https://pastebin.com/raw/u07K0H9g",extra='-',folder= True )        
+
+def play_resolver(params):
+    import resolveurl 
+    video = resolveurl.resolve( params.get("url") )
+    plugintools.play_resolved_url( video )       
+
+def quita_favoritos():
+    favoritos = xbmc.translatePath('special://home/userdata/favourites.xml')    
+    try:
+        f = open(favoritos,'rw')
+        favoritos1 = f.readlines()
+        for line in favoritos1:
+            if not 'portal.php?type=' in line:
+                f.write(line)
+        f.close()
+    except:
+        pass
+        
+def mac_portal(server):
+    dhoy=date.today()
+    text_today = dhoy.strftime("%Y%m%d")        
+    hoy=int(text_today)    
+    data=urlopen(Request("https://pastebin.com/raw/"+server)).read().decode('utf-8').lower()
+    macx=re.findall('(00:1a:79:.*?........)', data)
+    portal=str(re.findall('portal"(.*?)"', data)[0])
+    mac =random.choice(macx)
+    myaddon.setSetting('revres',server)
+    myaddon.setSetting('cam',mac)
+    myaddon.setSetting('latrop',portal)
+    myaddon.setSetting('fec',text_today)
+    return mac,portal
+
+def get_canales(mac,portal):
+    usuario = ''
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0","cookie": "mac="+mac+"; stb_lang=es; timezone=Europe/spain"}
+    url=portal+'portal.php?type=stb&action=handshake&JsHttpRequest=1-xml'
+    try:
+        token =requests.get(url, headers=headers).text
+        token=re.findall('token":"(.*?)"',token)[0]
+        
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0","cookie": "mac="+mac+"; stb_lang=es; timezone=Europe/spain","Authorization": "Bearer "+token}
+        url=portal+'portal.php?type=stb&action=get_profile&JsHttpRequest=1-xml'
+        source=requests.get(url, headers=headers).text
+        passs=re.findall('login":"","password":"(.*?)"',source )[0]
+        typee=re.findall('"stb_type":"(.*?)"',source )[0]
+        payload={"login":usuario,"password":passs,"stb_type":typee}
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0","cookie": "mac="+mac+"; stb_lang=es; timezone=Europe/spain","Authorization": "Bearer "+token}
+        url=portal+'portal.php?type=itv&action=get_genres&JsHttpRequest=1-xml'
+        s = requests.Session()
+        source=s.post(url, headers=headers,data=str(payload)).text        
+        return plugintools.find_multiple_matches(source,'"id":"(\d+.*?)".*?"title":"(.*?)"'),token 
+    except:
+        xbmc.log('ERROR LEYENDO DE : '+str(portal))
+        return [],[]
+        
+def tulista(params):
+    dhoy=date.today()
+    text_today = dhoy.strftime("%Y%m%d")        
+    hoy=int(text_today)
+    try:
+        mac=myaddon.getSetting('cam')      
+        server=myaddon.getSetting('revres')
+        portal=myaddon.getSetting('latrop')
+        nat=int(myaddon.getSetting('nat'))
+        fec_texto=myaddon.getSetting('fec')
+        fec=int(fec_texto)
+    except:
+        nat=11
+        mac=''
+        server=''
+        portal=''
+        myaddon.setSetting('cam',mac)
+        myaddon.setSetting('revres',server)
+        myaddon.setSetting('latrop',portal)
+        myaddon.setSetting('nat',str(nat))
+        myaddon.setSetting('fec',text_today)
+        fec = hoy
+    
+    if fec < hoy:     
+        nat=11
+    
+    maximo=False
+    if nat<=0:
+        xbmcgui.Dialog().ok('MAXIMO nº de listas alcanzado', 'Has llegado al nº maximo de listas a usar hoy. Tienes que esperar a mañana para poder volver a usar la lista. Te dejamos con tu última lista de hoy')
+        maximo=True
+        #xbmc.executebuiltin('Action(Back)')
+        #return
+    
+    #Guardo el nº de veces = nº de veces-1 y guardo la fecha actual
+    
+    if fec==hoy and maximo==False:
+        dialog = xbmcgui.Dialog()
+        ret = dialog.select('Selecciona opcion', ['[COLOR red]CREAR LISTA NUEVA[/COLOR]       [ Te quedan [COLOR green]'+str(nat)+'[/COLOR] intentos ]', '[COLOR white]Seguir com mi lista de HOY[/COLOR]'])
+    else:
+        if maximo==False:
+            ret=0
+        else:
+            ret=1
+           
+    if ret==0:
+        #Lista de Servidores desde pastebin
+        serv = urlopen(Request("https://pastebin.com/raw/a38wUnQf")).read().decode('utf-8')
+        data=[]
+        intento=1
+        while data ==[] and intento<=10:
+            servidores=serv.split(",")
+            server = str(random.choice(servidores))
+            mac,portal=mac_portal(server) 
+            xbmc.log('llamando al servidor: '+str(server))  
+            data,token=get_canales(mac,portal)
+            
+            if data!=[]:                
+                
+                nat=nat-1   
+                myaddon.setSetting('nat',str(nat))
+                i=1
+                pb=xbmcgui.DialogProgress()
+                pb.create('Cargando canales','')
+                total=len(data)
+                for patron in sorted(data, key=lambda patron: patron[1]):         
+                    titulo=str(patron[1]).replace('\\','').replace('\u00ed','i').replace('\u00eda','e').replace('\u00f1','ñ').replace('\u00fa','u').replace('\u00f3','o').replace('\u00c1','a').replace('\u00e9','e').replace('\u00d1','Ñ').replace('\u00e1','a')
+                    ids=str(patron[0])
+                    plugintools.add_item( action="lista2", title="[COLOR white]"+colorea(titulo)+"[/COLOR]", thumbnail = params.get("thumbnail"), fanart= params.get("thumbnail"),plot=token,page=mac,extra=portal,url=ids,folder=True ) 
+                    pb.update(int(100*i/total),str(100*i/total)+'% - Cargando canal '+str(titulo))
+                    i+=1
+                
+                pb.close()
+                
+            else:
+                intento=intento+1
+    
+        if intento==3 and data==[]:
+            xbmcgui.Dialog().ok('MAXIMO nº de intentos buscando lista alcanzado', 'Parece que no hay suerte con esta lista, prueba suerte con otra')
+            xbmc.executebuiltin('Action.Back()')
+            xbmc.executebuiltin('Content.Refresh()')
+            return
+
+    if ret==1:
+        try:
+            data,token=get_canales(mac,portal)
+            for patron in sorted(data, key=lambda patron: patron[1]):         
+                titulo=patron[1].replace('\u00ed','i').replace('\u00eda','e').replace('\u00f1','ñ').replace('\u00fa','u').replace('\u00f3','o').replace('\u00c1','a').replace('\u00e9','e').replace('\u00d1','Ñ').replace('\u00e1','a').replace('\\','') 
+                ids=str(patron[0])
+                plugintools.add_item( action="lista2", title="[COLOR white]"+colorea(titulo)+"[/COLOR]", thumbnail = params.get("thumbnail"), fanart= params.get("thumbnail"),plot=token,page=mac,extra=portal,url=ids,folder=True ) 
+        except:
+            xbmc.executebuiltin('Notification(Servidor caído, Parece que este servidor no está operativo,8000')
+            #xbmc.executebuiltin('Action(Back)')
+            
+            
+def lista2(params):
+    s=''
+    ids = params.get("url")
+    portal = params.get("extra")
+    mac = params.get("page")
+    token = params.get("plot")
+    headers = '{"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0","cookie": "mac="'+mac+'"; stb_lang=es; timezone=Europe/spain","Authorization": "Bearer "'+token+'}'
+    pb  = xbmcgui.DialogProgress()
+    pb.create('Cargando canales','')     
+    count=40;pn=1;data=[]
+    
+    while pn <= int(count):
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0","cookie": "mac="+mac+"; stb_lang=es; timezone=Europe/spain","Authorization": "Bearer "+token}
+        #pb.update(int(pn/40),'Pagina '+str(pn)) 
+        page=portal+'portal.php?type=itv&action=get_ordered_list&genre='+ids+'&force_ch_link_check=&fav=0&sortby=number&hd=0&p='+str(pn)+'&JsHttpRequest=1-xml';source=requests.get(page, headers=headers).text            
+        data +=re.findall('"id":".*?","name":"(.*?)".*?"ch_id":"(.*?)"',source);pn +=1
+        
+    i=1
+    total=len(data)
+    for patron in sorted(data, key=lambda patron: patron[0]):         
+        canal=str(patron[1])               
+        #titulo=patron[0].decode('utf-8').replace('\u00ed','i').replace('\u00eda','e').replace('\u00f1','ñ').replace('\u00fa','u').replace('\u00f3','o').replace('\u00c1','a').replace('\u00e9','e').replace('\u00e1','a').replace('\\','') 
+        titulo=str(patron[0])
+        pb.update(int(100*i/140),str(100*i/total)+'% - Canal '+titulo)         
+        plugintools.add_item( action="lista3",extra=portal,url=canal,page=mac,plot=params.get("plot"),title="[LOWERCASE][CAPITALIZE][COLOR white]"+colorea(titulo)+"[/CAPITALIZE][/LOWERCASE][/COLOR]", thumbnail = params.get("thumbnail"), fanart= params.get("thumbnail"),folder=False,  isPlayable = True )         
+        i+=1
+        
+    pb.close()    
+    
+    
+def lista3(params):
+    s=''
+    canal = params.get("url")
+    portal = params.get("extra")
+    mac = params.get("page")
+    titulo1 = params.get("plot")
+    headers =headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0","cookie": "mac="+mac+"; stb_lang=es; timezone=Europe/spain","Authorization": "Bearer "+titulo1}
+    url=portal+'portal.php?type=itv&action=create_link&cmd=http://localhost/ch/'+canal+'_&series=&forced_storage=undefined&disable_ad=0&download=0&JsHttpRequest=1-xml'
+    source=requests.get(url, headers=headers).text
+    token=re.findall('"cmd":"ffmpeg (.*?)"',source )[0]
+    url=token.replace("\\", "")
+    url=url
+    plugintools.play_resolved_url(url)
+
+ 
+def super_tdt(params): 
+    plugintools.log("koditv.ipkoditv")
+    thumbnail = params.get("thumbnail")    
+    url = params.get("url")
+    request_headers=[]
+    request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+    body,response_headers = plugintools.read_body_and_headers( url, headers=request_headers)
+    url = body.strip()
+    matches = plugintools.find_multiple_matches(url,'path></svg></a>(.*?)<|<tr>.*?<td>(.*?)<.*?td><a href="(.*?m3u8).*?</a></td>.*?</a></td>.*?href="(.*?)"')
+    pb=xbmcgui.DialogProgress()
+    pb.create('Cargando canales','por favor espere...')
+    i=1 
+    total=len(matches)    
+    for patron in sorted(matches, key=lambda patron: patron[0]+' '+patron[1]):           
+        url=str(patron[2])
+        titulo1=str(patron[0])
+        titulo2=str(patron[1])
+        foto=str(patron[3])
+        if url!='':
+            plugintools.add_item(action="linkdirecto", url=url,title="[LOWERCASE][CAPITALIZE][COLOR white]"+colorea(titulo1)+" [COLOR white]"+colorea(titulo2)+"[/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail=foto,fanart=foto,folder=False,  isPlayable = True )
+            pb.update(int(100*i/total),str(100*i/total)+'% - Cargando canal: '+str(titulo1)+' '+str(titulo2))
+            i+=1
+    
+    pb.close()
+    
+    
+def super_iptv(params): 
+    plugintools.log("koditv.super_iptv")
+    thumbnail = params.get("thumbnail")           
+    url = params.get("url") 
+    request_headers=[]
+    request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+    body,response_headers = plugintools.read_body_and_headers( url, headers=request_headers)
+    url = body.strip()
+    matches = plugintools.find_multiple_matches(url,'(post-body entry-content.*?Older Posts)')
+    pb=xbmcgui.DialogProgress()
+    pb.create('Cargando canales','por favor espere...')
+    i=1
+    for generos2 in matches:            
+        
+        matches = plugintools.find_multiple_matches(generos2,'http://(.*?)/get.php.username=(.*?)&.*?password=(.*?)&.*?<br')
+        for generos in sorted(matches,key=lambda generos: generos[0]):
+            total = len(matches)
+            
+            url1=str(generos[0])
+            servidores = plugintools.find_single_match(url1,'(.*?):')
+
+            try:
+                import socket
+                equipo_remoto = servidores
+                servidor= socket.gethostbyname(equipo_remoto) 
+                url1=url1.replace(servidores,servidor)
+            except:
+                pass
+            
+            username=str(generos[1])
+            password=str(generos[2])
+            url='http://'+url1+'/enigma2.php?username='+username+'&password='+password
+            if str(servidores)!='':                                
+                plugintools.add_item(action="ipkoditv_enigma", url=url,title="[LOWERCASE][CAPITALIZE][COLOR white]"+servidores+"[/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail=thumbnail,fanart=thumbnail,folder=True )
+                pb.update(int(100*i/total),str(100*i/total)+'% - Canal: '+str(servidores))
+                i+=1
+    pb.close()
+    
+def ipkoditv(params): 
+
+    plugintools.log("koditv.ipkoditv")
+    thumbnail = params.get("thumbnail")    
+    plugintools.add_item(action="marcador", title="[LOWERCASE][CAPITALIZE][COLOR fuchsia] ipkoditv[COLOR lime][/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail=thumbnail,fanart=thumbnail,folder=False ) 
+    plugintools.add_item(action="", title="[LOWERCASE][CAPITALIZE][COLOR lime]consejo:[/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail="https://www.montero-aramburu.com/wp-content/uploads/2017/07/deportes_varios.jpg", fanart="https://www.radiomarcalanzarote.com/images/2019/10/1agenda-deportiva-del-fin-de-semana.jpg",  url= "http://www.formulatv.com/programacion/",folder= False )     
+    plugintools.add_item(action="", title="[LOWERCASE][CAPITALIZE][COLOR orange]probar las listas sin f4mtester[/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail="https://www.montero-aramburu.com/wp-content/uploads/2017/07/deportes_varios.jpg", fanart="https://www.radiomarcalanzarote.com/images/2019/10/1agenda-deportiva-del-fin-de-semana.jpg",  url= "http://www.formulatv.com/programacion/",folder= False )  
+    plugintools.add_item(action="", title="[LOWERCASE][CAPITALIZE][COLOR orange]y si encontramos una que funcione[/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail="https://www.montero-aramburu.com/wp-content/uploads/2017/07/deportes_varios.jpg", fanart="https://www.radiomarcalanzarote.com/images/2019/10/1agenda-deportiva-del-fin-de-semana.jpg",  url= "http://www.formulatv.com/programacion/",folder= False ) 
+    plugintools.add_item(action="", title="[LOWERCASE][CAPITALIZE][COLOR orange]entonces si le activamns el f4mtester[/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail="https://www.montero-aramburu.com/wp-content/uploads/2017/07/deportes_varios.jpg", fanart="https://www.radiomarcalanzarote.com/images/2019/10/1agenda-deportiva-del-fin-de-semana.jpg",  url= "http://www.formulatv.com/programacion/",folder= False ) 
+    url = params.get("url")
+    request_headers=[]
+    request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+    body,response_headers = plugintools.read_body_and_headers( url, headers=request_headers)
+    url = body.strip()
+    matches = plugintools.find_multiple_matches(url,'("color:#06C">http://.*?username=.*?&password=.*?&type)')
+    for generos in matches:
+        patron=plugintools.find_single_match(generos,'"color:#06C">(http://(.*?))/.*?username=(.*?)&password=(.*?)&type')
+        url=plugintools.find_single_match(generos,'"color:#06C">(http://.*?)/.*?')
+        server=plugintools.find_single_match(generos,'"color:#06C">http://(.*?)/')
+        servidores = plugintools.find_single_match(url,'http://(.*?):')
+        import socket
+        equipo_remoto = servidores
+        servidor= socket.gethostbyname(equipo_remoto) 
+        url=url.replace(servidores,servidor)
+        username=plugintools.find_single_match(generos,'username=(.*?)&password')
+        password=plugintools.find_single_match(generos,'password=(.*?)&type')
+        url=url+'/enigma2.php?username='+username+'&password='+password
+        plugintools.add_item(action="ipkoditv_enigma", url=url,title="[LOWERCASE][CAPITALIZE][COLOR white]"+server+"[/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail=thumbnail,fanart=thumbnail,folder=True )
+
+    plugintools.add_item(action="marcador", title="[LOWERCASE][CAPITALIZE][COLOR fuchsia] ipkoditv[COLOR lime][/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail=thumbnail,fanart=thumbnail,folder=False ) 
+
+def ipkoditv_enigma(params): 
+    plugintools.log("koditv.ipkoditv")
+    thumbnail = params.get("thumbnail")    
+    plugintools.add_item(action="marcador", title="[LOWERCASE][CAPITALIZE][COLOR fuchsia] ipkoditv[COLOR lime][/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail=thumbnail,fanart=thumbnail,folder=False ) 
+    url3 = params.get("url")
+    page='&type=get_live_categories'
+    url=url3+page
+    request_headers=[]
+    request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+    
+    try:
+        body,response_headers = plugintools.read_body_and_headers( url, headers=request_headers)
+        url = body.strip()
+        matches = plugintools.find_multiple_matches(url,'((?s)<title>.*?</title>.*?<description.*?>.*?<.*?CDATA.*?&cat_id=.*?>.*?)')
+        pb=xbmcgui.DialogProgress()
+        pb.create('Cargando canales','por favor espere...')
+        i=1
+        total=len(matches)
+        for generos in sorted(matches):
+            url=str(plugintools.find_single_match(generos,'(&cat_id=.*?)..>.*?'))
+            description=plugintools.find_single_match(generos,'<description.*?>(.*?)<.*?')            
+            description= base64.b64decode(description)
+            description = description.decode('utf-8')
+            titulo=plugintools.find_single_match(generos,'<title>(.*?)</title>')
+            message_bytes = base64.b64decode(titulo)
+            titulo = message_bytes.decode('utf-8')
+            url=url3+'&type=get_live_streams'+url
+            plugintools.add_item(action="ipkoditv_enigma2", url=url,title="[LOWERCASE][CAPITALIZE][COLOR white]"+colorea(titulo)+" "+description+"[/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail=thumbnail,fanart=thumbnail,folder=True )
+            pb.update(int(100*i/total),str(100*i/total)+'% - Cargando canal: '+str(titulo))
+            i+=1
+        
+        pb.close()
+    
+    except:
+            pass
+    
+    plugintools.add_item(action="marcador", title="[LOWERCASE][CAPITALIZE][COLOR fuchsia] ipkoditv[COLOR lime][/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail=thumbnail,fanart=thumbnail,folder=False ) 
+
+def ipkoditv_enigma2(params): 
+    plugintools.log("koditv.ipkoditv")
+    thumbnail = params.get("thumbnail")    
+    plugintools.add_item(action="marcador", title="[LOWERCASE][CAPITALIZE][COLOR fuchsia] ipkoditv[COLOR lime][/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail=thumbnail,fanart=thumbnail,folder=False ) 
+    url3 = params.get("url")
+    request_headers=[]
+    request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+    body,response_headers = plugintools.read_body_and_headers( url3, headers=request_headers)
+    url = body.strip()
+    matches = plugintools.find_multiple_matches(url,'(?s)<title>(.*?)</title>.*?<description.*?>(.*?)<.*?CDATA.(.*?)..>.*?DATA.*?(http.*?.ts)')
+    pb=xbmcgui.DialogProgress()
+    pb.create('Cargando canales','por favor espere...')
+    i=1
+    total=len(matches)
+    for generos in sorted(matches,key=lambda generos: generos[0]):        
+        url=str(generos[3])
+        titulo=generos[0]
+        message_bytes = base64.b64decode(titulo)
+        titulo = message_bytes.decode('utf-8')
+        hora = plugintools.find_single_match(titulo,'\[(.*?)\]')
+        emision = plugintools.find_single_match(titulo,'(?s) .*?[A-Z].*?[A-Z].*? \[.*?\] ....*?min   (.*)').replace('(','').replace('[','').replace('|','').replace(',','').replace('-','').replace('Live Streams','')
+        titulo = plugintools.find_single_match(titulo,'(.*?[A-zZ]: .*?\[|.*?[A-zZ] .*?\[|.*?[A-zZ]: .*?\(|.*?[A-zZ]: .*? .*? |.*?[A-zZ]: [A-zZ].*|.*?[A-Z].*)').replace('(','').replace('[','').replace('|','').replace(',','').replace('-','').replace('Live Streams','')
+        description=str(generos[1])
+        data=str(generos[2])
+        url = url
+        plugintools.add_item(action="linkdirecto", url=str(url),title="[LOWERCASE][CAPITALIZE][COLOR white]"+colorea(str(titulo))+" [COLOR white]" +str(hora)+" [COLOR lime]"+str(emision)+"[/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail=thumbnail,fanart=thumbnail,folder=False,  isPlayable = True)
+        pb.update(int(100*i/total),str(100*i/total)+'%  -Cargando canal: '+str(titulo))
+        i+=1
+     
+    pb.close()
+     
+def multilistas_mundo(params): 
+    plugintools.log("koditv.multilistas_mundo")
+    thumbnail = params.get("thumbnail")    
+    plugintools.add_item(action="", title="[COLOR mintcream]===[LOWERCASE][CAPITALIZE][COLOR aquamarine]multilistas mundo [COLOR mintcream]===[/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail="https://www.montero-aramburu.com/wp-content/uploads/2017/07/deportes_varios.jpg", fanart="https://www.radiomarcalanzarote.com/images/2019/10/1agenda-deportiva-del-fin-de-semana.jpg",  url= "http://www.formulatv.com/programacion/",folder= False ) 
+    
+    url = params.get("url")
+    
+    request_headers=[]
+    request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+    body,response_headers = plugintools.read_body_and_headers( str(url), headers=request_headers)
+    url = body.strip()    
+    matches = plugintools.find_multiple_matches(url,'menu-item-has-children menu-item-.*?<a href=".*?">(.*?)<.*?|item-object-category menu-item-.*?href="(.*?)">(.*?)<')
+    pb=xbmcgui.DialogProgress()
+    pb.create('Cargando canales','por favor espere...')
+    i=1
+    total=len(matches)
+    for generos in sorted(matches,key=lambda generos:generos[2]):
+        
+        pais=generos[0]
+        url=generos[1]
+        titulo=str(generos[2])
+ 
+        request_headers=[]
+        request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+        body,response_headers = plugintools.read_body_and_headers( url, headers=request_headers)
+        url = body.strip()
+        url=plugintools.find_single_match(url,'(?s)archive-title">Category.*? itemprop="headline"><a href="(.*?)"')        
+        if str(url)!='':
+            plugintools . add_item ( action = "multilistas_mundo2" , title = "[LOWERCASE][CAPITALIZE][COLOR lime]"+colorea(str(pais))+" [COLOR white]"+colorea(str(titulo))+"[/CAPITALIZE][/LOWERCASE][/COLOR]", url = str(url), thumbnail =  thumbnail , fanart=thumbnail, folder=True)
+            pb.update(int(100*i/total),str(100*i/total)+'% - Cargando país: '+str(titulo))
+        i+=1    
+    
+    pb.close()
+    plugintools.add_item(action="", title="[COLOR mintcream]===[LOWERCASE][CAPITALIZE][COLOR aquamarine]multilistas mundo [COLOR mintcream]===[/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail="https://www.montero-aramburu.com/wp-content/uploads/2017/07/deportes_varios.jpg", fanart="https://www.radiomarcalanzarote.com/images/2019/10/1agenda-deportiva-del-fin-de-semana.jpg",  url= "http://www.formulatv.com/programacion/",folder= False ) 
+
+
+def multilistas_mundo2(params): 
+    plugintools.log("koditv.multilistas_mundo")
+    thumbnail = params.get("thumbnail")    
+    url = params.get("url")
+    
+    request_headers=[]
+    request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+    body,response_headers = plugintools.read_body_and_headers( url, headers=request_headers)
+    url = body.strip()
+    matches = plugintools.find_multiple_matches(url,'<a href="(https://gratisiptv.com/m3u/.*?)">Download .*? IpTV (.*?)</a>')
+    pb=xbmcgui.DialogProgress()
+    pb.create('Cargando canales','por favor espere...')
+    i=1
+    total=len(matches)
+    for patron in sorted(matches, key=lambda patron: patron[1]):
+        url=str(patron[0])
+        titulo=(str(patron[1]).replace('\u00ed','i').replace('\u00eda','e').replace('\u00f1','ñ').replace('\u00fa','u').replace('\u00f3','o').replace('\u00c1','a').replace('\u00e9','e').replace('\u00e1','a').replace('\\','') )
+        if url!='':
+            plugintools . add_item ( action = "multilistas2" , title = "[LOWERCASE][CAPITALIZE] [COLOR white]"+colorea(titulo)+"[/CAPITALIZE][/LOWERCASE][/COLOR]", url = url, thumbnail =  thumbnail , fanart=thumbnail, folder=True)
+            pb.update(int(i/total),'Cargando canal: '+str(titulo))
+        i+=1    
+    
+    pb.close()
+
+def multilistas(params): 
+    plugintools.log("koditv.adictos ")
+    thumbnail = params.get("thumbnail")    
+    url = params.get("url")    
+    request_headers=[]
+    request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+    body,response_headers = plugintools.read_body_and_headers( url, headers=request_headers)
+    url = body.strip()
+    url = plugintools.find_single_match(url,'category menu-item-426"><a href="(https://www.gratisiptv.com/.*?span.*?)">Spain')    
+    request_headers=[]
+    request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+    body,response_headers = plugintools.read_body_and_headers( url, headers=request_headers)
+    url = body.strip()
+    url = plugintools.find_single_match(url,'(?s)Category: Spain.*?itemprop="headline"><a href="(.*?)">')
+    request_headers=[]
+    request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+    body,response_headers = plugintools.read_body_and_headers( url, headers=request_headers)
+    url = body.strip()
+    patron = plugintools.find_multiple_matches(url,'<a href="(https://gratisiptv.com/m3u/.*?)">Download Spain IpTV (.*?)<')
+    for matches in sorted(patron, key=lambda matches: matches[1]):
+        url = str(matches[0])
+        titulo = colorea(str(matches[1]).replace('\u00ed','i').replace('\u00eda','e').replace('\u00f1','ñ').replace('\u00fa','u').replace('\u00f3','o').replace('\u00c1','a').replace('\u00e9','e').replace('\u00e1','a').replace('\\','') )
+        plugintools . add_item ( action = "multilistas2" , title = "[LOWERCASE][CAPITALIZE][COLOR gold]"+titulo+"[/CAPITALIZE][/LOWERCASE][/COLOR]", url = url, thumbnail =  thumbnail , fanart=thumbnail, folder=True)
+   
+
+def multilistas2(params): 
+    plugintools.log("koditv.multilistas2")
+    thumbnail = params.get("thumbnail")    
+    url3 = params.get("url")
+    request_headers=[]
+    request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+    body,response_headers = plugintools.read_body_and_headers( url3, headers=request_headers)
+    url = body.strip()
+    patron = plugintools.find_multiple_matches(url,'(?i)EXTINF:....*?(.*?)(http.*?)\s*#')
+    pb=xbmcgui.DialogProgress()
+    pb.create('Cargando canales','por favor espere...')
+    i=1
+    total=len(patron)
+    for matches in sorted(patron):
+        url = str(matches[1])
+        titulo = str(matches[0]).replace('|','').replace(',','').replace('-','').replace('\u00ed','i').replace('\u00eda','e').replace('\u00f1','ñ').replace('\u00fa','u').replace('\u00f3','o').replace('\u00c1','a').replace('\u00e9','e').replace('\u00e1','a').replace('\\','') 
+        server = plugintools.find_single_match(url,'http://(.*?):.*?/')
+        import socket
+        equipo_remoto = str(server)
+        servidor= socket.gethostbyname(equipo_remoto) 
+        url=str(url).replace(server,servidor)     
+        plugintools.add_item(action="linkdirecto", url=url,title="[LOWERCASE][CAPITALIZE][COLOR white]"+colorea(titulo)+"[/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail=thumbnail,fanart=thumbnail,folder=False,  isPlayable = True)
+        pb.update(int(i/total),'Cargando canal: '+str(titulo))
+        i+=1    
+    
+    pb.close()
+
+ 
+def adictos(params): 
+    plugintools.log("koditv.adictos ")
+    thumbnail = params.get("thumbnail") 
+    plugintools.add_item(action = "" , title = "[B][LOWERCASE][CAPITALIZE][COLOR %s]necesario vpn [COLOR mintcream][/CAPITALIZE][/LOWERCASE][/B][/COLOR]"% Set_Color, thumbnail ="https://www.cliver.to/img/logo.png", fanart = "https://image.winudf.com/v2/image/Y29tLmNsaXZlcmFydC5vbmxpbmV0dmd1aWFfc2NyZWVuXzBfMTUyNTk1MTgzN18wNjA/screen-0.jpg?fakeurl=1&type=.jpg",  folder=False )
+ 
+    url = params.get("url")
+ 
+    torete = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0"} 
+    
+    body=requests.get(url,  headers=torete ).text
+    
+    url = body.strip()
+    matches = plugintools.find_multiple_matches(url,'(<li id="menu-item-.*?"><a href=".*?//adictos.*?/.*?".*?>.*?<)')
+ 
+    for generos in matches:
+ 
+        url = str(plugintools.find_single_match(generos,'href="(.*?)"'))
+        titulo = str(plugintools.find_single_match(generos,'href=".*?">.(.*?)<'))
+ 
+        plugintools . add_item ( action = "adictos2" , title = "[LOWERCASE][CAPITALIZE][COLOR mintcream]"+titulo+"[/CAPITALIZE][/LOWERCASE][/COLOR]", url = url, thumbnail =  thumbnail , fanart=thumbnail, folder=True)   
+ 
+ 
+def adictos2(params): 
+    plugintools.log("koditv.adictos2 ")
+    thumbnail = params.get("thumbnail")    
+ 
+    url1 = params.get("url")
+    
+    torete = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0"} 
+    try:
+        url=requests.get(url1,  headers=torete ).text
+    except:
+        
+        return
+    
+    if 'infan' in url1:
+        matches = plugintools.find_multiple_matches(url,'(<a href="//adictosalatele.com/[A-z].*?/" title=".*?en vivo"><img src="/logos/.*?.png"/></a>.*?</td><td>)')
+ 
+        for generos in matches:
+ 
+ 
+            matches = plugintools.find_single_match(generos,'<a href="(//adictosalatele.com/[A-z].*?/)" title="(.*?)en vivo"><img src="(/logos/.*?.png)"/></a>.*?</td><td>')
+            url = 'https:'+str(matches[0])
+            titulo=str(matches[1])
+            foto='https://adictosalatele.com/'+str(matches[2])
+            plugintools . add_item ( action = "canales_deportes_fin" , title = "[LOWERCASE][CAPITALIZE][COLOR mintcream]"+titulo+"[/CAPITALIZE][/LOWERCASE][/COLOR]", url = url, thumbnail =  foto , fanart=foto,folder=False,  isPlayable = True)  
+    elif 'deporte' in url1:
+
+        url=requests.get(url,  headers=torete).text
+        
+        matches = plugintools.find_multiple_matches(url,'(center><span class="horario">.*?</h4></center>|<a href="//adictosaldeporte.com/TV/deportes.*?".*?title=".*?".*?<img src=".*?".*?</a>)')
+        for generos in matches: 
+            patron = plugintools.find_single_match(generos,'center><span class="horario">(.*?)</h4></center>|<a href="(//adictosaldeporte.com/TV/deportes.*?)".*?title="(.*?)".*?<img src="(.*?)".*?</a>')
+            titulo = str(patron[0])
+            url = 'https:'+str(patron[1])
+ 
+            titulocanal = str(patron[2])
+            foto = 'https://adictosaldeporte.com'+str(patron[3])
+            plugintools . add_item ( action = "canales_deportes_fin" , title = "[LOWERCASE][CAPITALIZE][COLOR lime]"+titulo+" [COLOR mintcream]"+titulocanal+"[/CAPITALIZE][/LOWERCASE][/COLOR]", url = url, thumbnail =  foto , fanart=foto, folder=False,  isPlayable = True)
+    else:
+        matches = plugintools.find_multiple_matches(url,'(<td>.*?<a href="//adictosalatele.com/.*?/" title=".*? en .*?"><img src=".*?" height=".*?" width=".*?"></a>.*?</td>)')
+ 
+        for generos in matches:
+ 
+ 
+            matches = plugintools.find_single_match(generos,'<a href="(//adictosalatele.com/.*?)" title="(.*?) en .*?<img src="(.*?)".*?')
+            url = 'https:'+str(matches[0])
+            titulo=str(matches[1])
+            foto='https://adictosalatele.com/'+str(matches[2])
+            plugintools . add_item ( action = "canales_deportes_fin" , title ="[LOWERCASE][CAPITALIZE][COLOR mintcream]"+titulo+"[/CAPITALIZE][/LOWERCASE][/COLOR]", url = url, thumbnail =  foto , fanart=foto,folder=False,  isPlayable = True )  
+ 
+ 
+ 
+def canales_deportes_fin(params): 
+    plugintools.log("koditv.canales_deportes ")
+    thumbnail = params.get("thumbnail")    
+    plugintools.add_item(action="marcador", title="[LOWERCASE][CAPITALIZE][COLOR fuchsia] agenda  assiatv horarios[COLOR lime][/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail=thumbnail,fanart=thumbnail,folder=False ) 
+ 
+    import re , requests       
+    url=params.get("url")
+    torete = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0"} 
+    try:
+        de = requests.get(url,  headers=torete).text
+    except:
+        
+        return
+ 
+    url1 = 'https:'+plugintools.find_single_match(de,'frameborder=".*?" src="(.*?)"')
+    de = requests.get(url1, headers=torete).text   
+    url = plugintools.find_single_match(de,'iframe src="(.*?)"') 
+    if 'http' in url:
+        url=url
+    else:
+        url='https:'+url
+ 
+ 
+    import re,requests
+    headers={
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3",
+        "Upgrade-Insecure-Requests": "1","Referer": "https://adictosalatele.com/"
+    }
+ 
+    source=requests.get(url,headers=headers, verify=False).text
+    
+    try:
+        url= str(re.findall('source.*?: "(.*?)"',source)[0])
+        
+    except:
+        try:
+            try:
+                pack=re.findall("(eval\(function\(p,a,c,k,e,d.*m3u8.*)", source)[0]
+                unpack=jsunpack.unpack(pack).replace('\\', '')
+                
+            except:
+                return
+            try:
+                url=re.findall('var src="(.*?)"', unpack)[0]
+            except:
+                return
+        except:
+            return
+    
+    server = plugintools.find_single_match(url,'http.*?//(.*?):.*?/') 
+    import socket
+    equipo_remoto = server
+    servidor= socket.gethostbyname(equipo_remoto) 
+    url=url.replace(server,servidor)
+    plugintools.play_resolved_url(url)  
+ 
+def linkdirecto(params):
+    url = params.get("url")    
+    plugintools.play_resolved_url(url)   
+
+def colorea(titulo):
+
+    if  'spain' in titulo.lower() or 'esp' in titulo.lower() or 'EU -ES' in titulo or 'spanish' in titulo.lower() or 'EU- ES' in titulo:               
+        color='darkorange'                                             
+    else:
+        if 'crime' in titulo.lower():
+            color='springgreen'
+        else:
+            if 'axn' in titulo.lower()  or 'accion' in titulo.lower() or 'estrenos'  in titulo.lower() or 'historia'  in titulo.lower() or 'odisea'  in titulo.lower() or 'discovery'  in titulo.lower():
+                    color='deeppink'
+            else:        
+                if 'adult' in titulo.lower() or 'xxx' in titulo.lower() or 'porn' in titulo.lower():
+                    color='red'
+                else:
+                    color='mintcream'
+    
+    return '[COLOR '+color+']'+titulo+'[/COLOR]'
+
+def wstram(url):
+    import re, requests, resolveurl
+    from resolveurl.plugins.lib import jsunpack 
+    url=url
+    headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3",
+    "Upgrade-Insecure-Requests": "1", "Referer":"https://www.televisiongratishd.com/live/azteca71.php"}
+    marcador = requests.get(url, headers=headers, verify=False)
+    r = marcador.content.decode('utf-8')
+    pack=re.findall("(eval\(function\(p,a,c,k,e,d.*)", r)[0]
+    unpack=jsunpack.unpack(pack).replace('\\', '')
+    try:
+        return re.findall('source:"(.*?)"', unpack)[0]
+    except:
+        link= re.findall('CryptOld."(.*?)"', unpack)[0]
+        import base64
+        description= base64.b64decode(link)
+        description= base64.b64decode(description)
+        description= base64.b64decode(description)
+        description= base64.b64decode(description)
+        return description.decode('utf-8')+'|User-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0&Referer=https://live.televisiongratishd.com/canales.php?id=1_'
+            
+def latinotv(params): 
+    plugintools.log("koditv.latinotv")
+    thumbnail = params.get("thumbnail")    
+    url3 = params.get("url")    
+    request_headers=[]
+    request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+    body,response_headers = plugintools.read_body_and_headers( url3, headers=request_headers)
+    url = body.strip()
+    matches = plugintools.find_multiple_matches(url,'(<div id="channelstv">.*?</div>)')
+    for generos in matches:
+        patron=plugintools.find_multiple_matches(generos,'<a href="(https://www.televisiongratishd.com/.*?)"><img alt="(.*?)" height=".*?" src="(.*?)" title=".*?" width=')       
+        for valores in sorted(patron,key=lambda valores:valores[1]):
+            url=valores[0]
+            titulo=valores[1]    
+            foto = valores[2]      
+            plugintools.add_item(action="latinotv2", url=url,title="[LOWERCASE][CAPITALIZE][COLOR white]"+titulo+"[/CAPITALIZE][/LOWERCASE][/COLOR]",thumbnail=foto,fanart=foto,folder=False,  isPlayable = True)
+ 
+def latinotv2(params): 
+    plugintools.log("koditv.latinotv2")
+    thumbnail = params.get("thumbnail")    
+    url3 = params.get("url")    
+    request_headers=[]
+    request_headers.append(["User-Agent","Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0"])
+    body,response_headers = plugintools.read_body_and_headers( url3, headers=request_headers)
+    url = body.strip()
+    url=plugintools.find_single_match(url,'<iframe frameborder=.*?src="(http.*?)"')     
+    body,response_headers = plugintools.read_body_and_headers( url, headers=request_headers) 
+    url = body.strip() 
+    url=plugintools.find_single_match(url,'(?s)link=.*?a href="(https://www.televisiongratishd.com/.*?)"')  
+    body,response_headers = plugintools.read_body_and_headers( url, headers=request_headers) 
+    url = body.strip() 
+    url=plugintools.find_single_match(url,'<iframe src="(http.*?)"') 
+    
+    url=wstram(url)    
+    
+    try:
+        plugintools.play_resolved_url( url)               
+    except:
+        xmbc.executebuiltin('Notification(Canal no accesible, Parece que el canal no esta disponible en este momento,8000')
+
+
+run()

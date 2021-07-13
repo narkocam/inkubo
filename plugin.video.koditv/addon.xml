@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <addon id="plugin.video.koditv" version="21.2" name="[B]Kodi[/B] [COLOR red]TV[/COLOR]" provider-name="iNKuBo">
+      <requires>
+         <import addon="script.module.requests" />
+		 <import addon="script.module.resolveurl" />
+         <import addon="script.module.six" />
+      </requires>
+      <extension point="xbmc.python.pluginsource" library="default.py">
+         <provides>video</provides>
+      </extension>
+      <extension point="xbmc.addon.repository" name="inkubo Repo">
+         <info>https://github.com/narkocam/inkubo/blob/main/addon.xml</info>
+         <checksum>https://github.com/narkocam/inkubo/blob/main/addons.xml.md6</checksum>
+         <datadir zip="true">https://github.com/narkocam/inkubo/blob/main/</datadir>
+      </extension>
+      <extension point="xbmc.addon.metadata">
+         <platform>all</platform>
+         <summary lang="en">KodiTV</summary>
+         <summary lang="da">KodiTV</summary>
+         <description lang="en">Author does not make responsible for the use of this addon.</description>
+         <disclaimer lang="en_GB">Feel free to use this addon. Do not ask for help. This addon is only for educational porpouse.</disclaimer>
+         <website />
+         <license>GPL 3.0</license>
+         <platform>all</platform>
+         <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.png</fanart>
+         </assets>
+         <language>es</language>
+      </extension>
+   </addon>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+	id="plugin.video.guia" version="1.0" name="[B]Guia[/B] [COLOR red]TV[/COLOR]" provider-name="iNKuBo">
+<requires>
+    <import addon="script.module.requests" />    
+    <import addon="script.module.six" />
+  </requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	
+	 <extension point="xbmc.addon.repository" name="Kampanita Repository">
+        <info>https://github.com/kampanita/repository/blob/master/addon.xml</info>
+        <checksum>https://github.com/kampanita/repository/blob/master/addons.xml.md6</checksum>
+        <datadir zip="true">https://github.com/kampanita/repository/blob/master/</datadir>
+    </extension>
+	
+	<extension point="xbmc.addon.metadata">
+                <platform>all</platform>
+		<summary lang="en">Guia TV</summary>
+		<summary lang="da">Guia TV</summary>
+		<description lang="en">Author does not make responsible for the use of this addon.</description>
+		<disclaimer lang="en_GB">Feel free to use this addon. Do not ask for help. This addon is only for educational porpouse.</disclaimer>
+		<website></website>
+		<license>GPL 3.0</license>
+		<platform>all</platform>
+<assets>
+        <icon>icon.png</icon>
+        <fanart>fanart.jpg</fanart>
+    </assets>        
+		<language>es</language>
+	</extension>
+</addon>
+

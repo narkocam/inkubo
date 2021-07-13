@@ -1,0 +1,213 @@
+# coding=utf-8
+# -*- coding: utf-8 -*-
+#------------------------------------------------------------
+# KepaIPTV - XBMC Add-on by Kepa
+# Version 2.1 (26.04.2021)
+#------------------------------------------------------------
+# License: GPL (http://www.gnu.org/licenses/gpl-3.0.html)
+# Gracias a la librería plugintools de Jesús y a torete (www.mimediacenter.info)
+import os
+import sys
+try:
+    from urllib.request import urlopen
+    import urllib.request as urllib2
+    from urllib.parse import urlparse
+    import urllib.parse as urllib_
+    import urllib.error
+except:
+    from urllib import urlopen    
+    from urlparse import urlparse
+    import urllib as urllib_
+    import urllib2
+import re
+import xbmc
+import xbmcgui
+import xbmcaddon
+import xbmcplugin
+import plugintools
+import unicodedata
+import requests
+import shutil
+import base64
+import time
+import random
+
+PY3=False
+if sys.version_info[0] >= 3: PY3 = True; unicode = str; unichr = chr; long = int
+addon = xbmcaddon.Addon()
+addonname = '[LOWERCASE][CAPITALIZE][COLOR white]Guia[COLOR white]Tv[/CAPITALIZE][/LOWERCASE][/COLOR]'
+icon = addon.getAddonInfo('icon')
+myaddon = xbmcaddon.Addon("plugin.video.guia")
+
+## Fotos
+
+fanart_guia="http://www.panoramaaudiovisual.com/wp-content/uploads/2012/01/EPG-Toshiba-Smart-Tv-web.png"
+thmb_guia=fanart_guia
+
+def run():
+    #
+    
+    # Get params
+           
+    params = plugintools.get_params()
+    
+    if params.get("action") is None:
+        if PY3==False:
+            xbmc.executebuiltin('Container.SetViewMode(51)')        
+        
+        main_list(params)
+    else:
+       if PY3==False:
+           xbmc.executebuiltin('Container.SetViewMode(51)') 
+       action = params.get("action")
+       url = params.get("url")
+       exec (action+"(params)")
+
+    plugintools.close_item_list()
+
+    
+def main_list(params):
+    plugintools.add_item(action="guiatv",url="https://www.formulatv.com/programacion/movistarplus/",title="[COLOR white]Guia de[/COLOR][COLOR red] TV[/COLOR]", thumbnail=thmb_guia,fanart="http://www.panoramaaudiovisual.com/wp-content/uploads/2012/01/EPG-Toshiba-Smart-Tv-web.png",folder= True )     
+   
+
+def guiatv ( params ):
+    url = params.get("url")  
+    
+    header = [ ]
+    header.append ( [ "User-Agent" , "Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0" ] )
+    read_url , read_header = plugintools . read_body_and_headers ( url , headers = header )
+    
+    url = read_url.strip ( )    
+    
+    matches = re.findall(r'(?s)class="cadena">.*?<a href="([^"]+)" title="Programación ([^"]+)".*?|<div class="(ahora)">\s*(.*?)<.*?|<div class="luego">\s*<span class="date">(\d+:\d+)<\/span>\s*([^<]+)|<div class="mastarde">\s*<span class="date">(\d+:\d+)<\/span>\s*([^<]+)\s*|<span class="remain"><\/span>\s*<a class="mas" href="([^"]+)"><span>(Parrilla completa)<\/span',url)
+    
+    for url, channel, nowhour, now, laterhour, later, morelaterhour, morelater, url2, completed in matches:
+        nowhour = "\x20" +nowhour
+        if url:
+            url = url
+        else:
+            if url2:
+                url = url2    
+        title = "[B][COLOR snow]" + channel + "[/COLOR][/B]\x20" +' -'+"[COLOR red]"+nowhour+"[/COLOR]" + "\x20" +"[I]"+now+' '+laterhour + "\x20" +later+ morelaterhour +' '+morelater + "[/I][B][COLOR orange]" + completed + "[/COLOR][/B]"
+        if url:
+            plugintools.add_item ( action = "parse_guiatv" , title = title, url = url, thumbnail=thmb_guia, fanart=fanart_guia, folder = True)
+        else:
+            plugintools.add_item ( action = "" , title = title, url = url, thumbnail=thmb_guia, fanart=fanart_guia, folder = False)
+
+def parse_guiatv ( params ):
+    
+    url = params.get("url")  
+    header = [ ]
+    header . append ( [ "User-Agent" , "Mozilla/5.0 (Windows NT 10.0; rv:75.0) Gecko/20100101 Firefox/75.0" ] )
+    read_url , read_header = plugintools . read_body_and_headers ( url , headers = header )
+    url = read_url . strip ( )    
+    matches = re.findall(r'{"@context":"[^"]+","@type":"Event","name":"(\d+:\d+ - [^"]+)","description":"([^"]+)"',url)
+    for title, desc in matches: 
+        plugintools . add_item ( action = "" , title = title.decode('utf-8'), url = url, thumbnail=thmb_guia, fanart=fanart_guia,folder = False)
+
+
+def get_proxy():   
+    #intento leer del fichero local el proxy
+         #si existe el fichero, leo el proxy y lo preebo
+              #si funciona, devuelvo el proxy
+              #si no funciona, busco otro y pruebo hasta encontrar uno valido.
+
+    #si no existe el fichero, lo creo y busco un proxy para guardarlo
+    try:
+        
+        #fichero_local=open(local_file,'r')
+        #my_proxy=fichero_local.read()
+        #fichero_local.close()
+        my_proxy=myaddon.getSetting('proxy')
+        if test_proxy(my_proxy)==True:
+            #xbmc.executebuiltin('Notification(Proxy test ok, [COLOR green]OK[/COLOR]: '+my_proxy+',10) ')
+            return my_proxy
+        else:
+            #xbmc.executebuiltin('Notification(Proxy test ko, [COLOR red]KO[/COLOR]: '+my_proxy+',10) ')
+            my_proxy=coge_proxy()
+            return my_proxy    
+    except:
+        #xbmc.executebuiltin('Notification(Local file ko, [COLOR red]Buscando un nuevo proxy[/COLOR]: ,1000) ')
+        my_proxy=coge_proxy()
+        return my_proxy    
+ 
+def guarda_proxy(my_proxy):       
+        #fichero_local=open(local_file,'w+')
+        #fichero_local.write(my_proxy)
+        #fichero_local.close()
+        myaddon.setSetting('proxy',my_proxy)
+        #xbmc.executebuiltin('Notification(Proxy saved ok, [COLOR green]Guardado en local [/COLOR]: '+my_proxy+',500) ')
+        #print("Guardo Fichero "+str(my_proxy))
+
+def coge_proxy():
+    #print("Buscando proxy")
+    #Leo desde proxyscape la lista diaria de proxys gratis
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8","Accept-Language": "es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3","Upgrade-Insecure-Requests": "1"} 
+    lista_proxys='https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all' 
+    de = requests.get(lista_proxys,headers=headers).text
+    #Cojo todos los proxys del listado con expresion regular, lo guardo en el array lista_proxyes
+    lista_proxyes= re.findall('(\d+.*?:\d+).*?\n',de)   
+    
+    #miro a ver cuantos proxys se ha traido en la lista
+    numero_proxyes = len(lista_proxyes)
+    #print("hay "+str(numero_proxyes)+" para probar")
+    #Inicializo el contador de intentos a 1
+    numero_intentos=1
+    
+    #inicializo el valor del proxy a devolver a nulo
+    mi_proxy=''
+    head='[COLOR red]Buscando Proxy[/COLOR]'
+    pb  = xbmcgui.DialogProgressBG()    
+    pb.create(head,'') 
+    max_intentos=round((numero_proxyes-1)/10)
+    #Realizo un bucle de intentos, hasta que haya probado con todos, o haya encontrado uno valido 
+    while numero_intentos < max_intentos:    
+        de='-'    
+        my_proxy=random.choice(lista_proxyes)
+        if test_proxy(my_proxy)==False:          
+            numero_intentos=numero_intentos+1    
+            msg="Intento "+str(numero_intentos)+" de "+str(max_intentos)+ " ("+str(my_proxy)+")"
+            percent=int(numero_intentos/max_intentos*100)
+            pb.update(percent,head,str(percent)+'% '+msg)                        
+            #xbmc.executebuiltin('Notification(Buscando proxy,'+msg+',2000)')
+        else:
+            guarda_proxy(my_proxy)
+            break
+    
+    pb.close()    
+    return my_proxy
+
+def test_proxy(my_proxy):
+    
+    url = 'https://cuevana3.io/'        
+    
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8","Accept-Language": "es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3","Upgrade-Insecure-Requests": "1"} 
+    test_proxy = {"https": "http://"+my_proxy}               
+    try:
+        de = requests.get(url, proxies=test_proxy, headers=headers,timeout=7).text            
+        #Si ha encontrado el texto "cuevana" dentro del cuerpo html de la pagina, es que el proxy ha funcionado
+        #porque ha conseguido traerse la pagina
+        if 'cuevana' in de:                            
+        
+            return True
+        else:
+             
+            return False           
+    except:
+        
+        # test_proxy = {"http": "http://"+my_proxy}               
+        
+        # try:
+        #     de = requests.get(url, proxies=test_proxy, headers=headers,timeout=8).text            
+        #     #Si ha encontrado el texto "cuevana" dentro del cuerpo html de la pagina, es que el proxy ha funcionado
+        #     #porque ha conseguido traerse la pagina
+        #     if 'cuevana' in de:                                
+        
+        #         return True
+        #     else:           
+        #         return False
+        # except:
+        
+        return False
+
+run()

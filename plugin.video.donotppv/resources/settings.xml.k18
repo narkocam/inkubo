@@ -1,0 +1,13 @@
+<settings>
+   <category>
+    <setting id="escogido" type="text" visible="false" value="[COLOR red]1-Personal[/COLOR]" />    
+    <setting label="[COLOR red]Lista Servidores  [/COLOR]:" id="lista" type="text" visible="true" value="Kqt7YaaC,uYGvdDUF,gc1Zn64A,9JRGRTnw,Kg4mJV4Z,XHNH4gLG,CZmAWep7,pfducjrm,MF2xRxKn,VLbLPEki,XHNH4gLG,8TjcEVkL,VJEUdJrh,vU0CYvX6,fvjEnkv0,3ExD6wcX,DeNXGKh5,5A6gcbrn,fAwZZkr4,SGPrbBJ5,pys7JWVi" default="Kqt7YaaC,uYGvdDUF,gc1Zn64A,9JRGRTnw,Kg4mJV4Z,XHNH4gLG,CZmAWep7,pfducjrm,MF2xRxKn,VLbLPEki,XHNH4gLG,8TjcEVkL,VJEUdJrh,vU0CYvX6,fvjEnkv0,3ExD6wcX,DeNXGKh5,5A6gcbrn,fAwZZkr4,SGPrbBJ5,pys7JWVi"/>
+    <setting label="[COLOR green]Nombres Servidores[/COLOR]:" id="lista_servidores" type="text" visible="true" value="Global,Tombola-1,Tombola-2,[COLOR blue]0-Unlimited[/COLOR],[COLOR red]1-Personal[/COLOR],[COLOR darkorange]2-Personal[/COLOR],[COLOR orange]3-Kepa[/COLOR],[COLOR orangered]4-Best[/COLOR],[COLOR tomato]5-Gordito[/COLOR],[COLOR sandybrown]6-4K[/COLOR],[COLOR firebrick]7-Proplus[/COLOR],[COLOR peachpuff]8-ontvbox.net[/COLOR],[COLOR red]9-PPPV-plug[/COLOR],[COLOR brown]10-hdhd.tk[/COLOR],[COLOR sienna]11-Geostream[/COLOR],[COLOR saddlebrown]12-Webhop[/COLOR],Luckytvpro,Darkside,Jedicctv,Pruebas" default="Global,Tombola-1,Tombola-2,[COLOR blue]0-Unlimited[/COLOR],[COLOR red]1-Personal[/COLOR],[COLOR darkorange]2-Personal[/COLOR],[COLOR orange]3-Kepa[/COLOR],[COLOR orangered]4-Best[/COLOR],[COLOR tomato]5-Gordito[/COLOR],[COLOR sandybrown]6-4K[/COLOR],[COLOR firebrick]7-Proplus[/COLOR],[COLOR peachpuff]8-ontvbox.net[/COLOR],[COLOR red]9-PPPV-plug[/COLOR],[COLOR brown]10-hdhd.tk[/COLOR],[COLOR sienna]11-Geostream[/COLOR],[COLOR saddlebrown]12-Webhop[/COLOR],Luckytvpro,Darkside,Jedicctv,Pruebas"/>
+    <setting id="mac2" type="text" visible="false" value="00:1a:79:6c:43:86" />
+    <setting id="portal2" type="text" visible="false" value="http://portal.wag-iptv.de:8080/" />
+    <setting label="Guardar Favoritos" id="favs" type="bool" visible="true" value="false" />
+    <setting label="Canales pr0n:" id="pr0n" type="bool" visible="true" value="false" />
+	<setting label="Activar Proxy:" id="prx" type="bool" visible="true" value="true" />
+    <setting id="ser" type="text" visible="false" value="Kg4mJV4Z" />
+   </category>
+</settings>

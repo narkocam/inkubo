@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <addon id="script.backchanger" version="1.0" name="[COLOR red]B[COLOR white]ackGround[COLOR green] Changer[/COLOR] - 1.0" provider-name="iNKuBo">
+      <requires>
+         <import addon="script.module.requests" />
+      </requires>
+      <extension point="xbmc.python.pluginsource" library="default.py">
+         <provides>executable</provides>
+      </extension>
+      <extension point="xbmc.addon.repository" name="inkubo Repo">
+         <info>https://github.com/narkocam/inkubo/blob/main/addon.xml</info>
+         <checksum>https://github.com/narkocam/inkubo/blob/main/addons.xml.md6</checksum>
+         <datadir zip="true">https://github.com/narkocam/inkubo/blob/main/</datadir>
+      </extension>
+      <extension point="xbmc.addon.metadata">
+         <platform>all</platform>
+         <summary lang="es">Personal addon BackGround Chanter</summary>
+         <description lang="es">This addon changes Kodi Background - for personal and private use only</description>
+         <website>https://github.com/kampanita/repository</website>
+         <license>GPL 3.0</license>
+         <platform>all</platform>
+         <disclaimer lang="es">The author of this addon makes not responsible for the use of it</disclaimer>
+         <assets>
+            <icon>icon.jpg</icon>
+            <fanart>fanart.png</fanart>
+         </assets>
+         <language>es</language>
+      </extension>
+   </addon>
