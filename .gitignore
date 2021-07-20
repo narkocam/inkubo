@@ -153,3 +153,5 @@ plugin.video.donotppv/enc/encripta.bat
 *.py
 plugin.video.chopocine/default.py.encoded
 fuentes/
+plugin.video.donotppv/default.py.encoded
+plugin.video.donotppv/default.py.pep8
