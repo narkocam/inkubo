@@ -155,3 +155,6 @@ plugin.video.chopocine/default.py.encoded
 fuentes/
 plugin.video.donotppv/default.py.encoded
 plugin.video.donotppv/default.py.pep8
+plugin.video.donotppv/default.py.ori.original
+plugin.video.donotppv/default.py.ori.original
+plugin.video.donotppv/default.py.old
