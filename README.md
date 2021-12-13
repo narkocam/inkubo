@@ -8,12 +8,12 @@
 - The author of this addon **does not accept any responsability about it's use**. Use it only **under your personal** responsability.
 
 > ##### Repository
->> * [Repository](https://github.com/narkocam/inkubo/raw/main/repository.inkubo-21.2.zip)
+>> * [Repository](https://github.com/narkocam/inkubo/raw/main/repository.inkubo-21.3.zip)
 > ##### Video
 >> * [KodiTV](https://github.com/narkocam/inkubo/raw/main/plugin.video.koditv-21.2.zip)
 >> * [ChopoCine](https://github.com/narkocam/inkubo/raw/main/plugin.video.chopocine-21.0.zip)
 >> * [ChopoSeries](https://github.com/narkocam/inkubo/raw/main/plugin.video.choposeries-21.0.zip)
->> * [DoNotPPV](https://github.com/narcokam/inkubo/raw/main/plugin.video.donotppv-1.2.zip)
+>> * [DoNotPPV](https://github.com/narcokam/inkubo/raw/main/plugin.video.donotppv-1.3.zip)
 
 > ##### Script
 >> * [BackChanger](https://github.com/narkocam/inkubo/raw/main/script.backchanger-1.0.zip)
