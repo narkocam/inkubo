@@ -408,6 +408,22 @@ def play_resolved_url(url):
     listitem.setProperty('IsPlayable', 'true')
     return xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
 
+def play_dash(url):
+    _log("play_dash ["+url+"]")
+
+    listitem = xbmcgui.ListItem(path=url)
+    #listitem.setProperty('#KODIPROP:inputstream=inputstream.adaptive')
+    listitem.setProperty('inputstream', 'inputstream.adaptive')
+    #listitem.setProperty('#KODIPROP:inputstream.adaptive.manifest_type=mpd')
+    listitem.setProperty('inputstream.adaptive.manifest_type','mpd')
+    listitem.setMimeType('application/dash+xml')
+    listitem.setContentLookup(False)
+    listitem.setProperty('IsPlayable', 'true')
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:76.0) Gecko/20100101 Firefox/76.0"}
+    head="User-Agent="+headers["User-Agent"]
+    listitem.setProperty('inputstream.adaptive.stream_headers',head)
+    return xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
+
 def direct_play(url):
     _log("direct_play ["+url+"]")
 
