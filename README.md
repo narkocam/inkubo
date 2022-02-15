@@ -9,11 +9,11 @@
 
 ```mermaid
  flowchart TD
-  A[Update version] --> B{'Es viernes ¿?¡};
-  B --> Sí --> C[NO hacer updates];
+  A[Update version] --> B{Es viernes ¿?};
+  B --> Si --> C[NO hacer updates];
   B --> No --> D[Si puedes hacer update];
-  C --> E [Disfruta del fin de semana];
-  D --> E [Disfruta del fin de semana];
+  C --> E[Disfruta del fin de semana];
+  D --> E[Disfruta del fin de semana];
 ```
 
 > ##### Repository
