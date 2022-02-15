@@ -7,14 +7,14 @@
 - If you are using this addon, **please stop using it right now**.
 - The author of this addon **does not accept any responsability about it's use**. Use it only **under your personal** responsability.
 
-'''mermaid
+```mermaid
  flowchart TD
   A[Update version] --> B{'Es viernes ¿?¡};
   B --> Sí --> C[NO hacer updates];
   B --> No --> D[Si puedes hacer update];
   C --> E [Disfruta del fin de semana];
   D --> E [Disfruta del fin de semana];
-'''
+```
 
 > ##### Repository
 >> * [Repository](https://github.com/narkocam/inkubo/raw/main/repository.inkubo-21.3.zip)
