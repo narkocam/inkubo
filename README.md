@@ -8,7 +8,7 @@
 - The author of this addon **does not accept any responsability about it's use**. Use it only **under your personal** responsability.
 
 ```mermaid
- flowchart TD
+ flowchart TD;
   A[Update version] --> B{Es viernes ¿?};
   B --> Si --> C[NO hacer updates];
   B --> No --> D[Si puedes hacer update];
