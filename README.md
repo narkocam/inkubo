@@ -9,9 +9,9 @@
 
 ```mermaid
 flowchart TD;
-    A[Update de la version]-->B{Es Viernes?};
-    B-->Sí-->C[Hacer update];
-    B-->No-->D[No hacer update];
+    A[Update de la version]-->B{Es Viernes ?};
+    B-->Sí-->C[NO Hacer update];
+    B-->No-->D[Hacer update];
     C-->E[Disfruta del fin de semana];
     D-->E[Disfruta del fin de semana];
 ```
