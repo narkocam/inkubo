@@ -160,3 +160,15 @@ plugin.video.donotppv/default.py.ori.original
 plugin.video.donotppv/default.py.old
 plugin.video.donotppv/default.py.ant
 plugin.video.donotppv/enc/default.py.ori
+plugin.video.Ramses2.zip
+plugin.video.Ramses2/addon.xml
+plugin.video.Ramses2/changelog.txt
+plugin.video.Ramses2/fanart.jpg
+plugin.video.Ramses2/icon.png
+plugin.video.Ramses2/LICENSE.txt
+plugin.video.Ramses2/resources/examples/channels_example.xml
+plugin.video.Ramses2/resources/examples/items_example.xml
+plugin.video.Ramses2/resources/settings.xml
+plugin.video.Ramses2/resources/source_file
+plugin.video.Ramses2/source_file
+plugin.video.Ramses2/source_file.txt
